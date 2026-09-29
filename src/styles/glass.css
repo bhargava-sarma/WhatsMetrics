@@ -1,0 +1,488 @@
+/* ============================================================================
+   Liquid glass surfaces
+   Translucent fill + backdrop blur, a specular rim (brighter at the top-left and
+   bottom-right, like light catching a bevel), a top inner highlight, and a soft
+   sheen that follows the pointer (--mx / --my, set by useGlassPointer).
+   ========================================================================== */
+.glass {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--glass-rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    520px circle at var(--mx, 18%) var(--my, -10%),
+    rgba(255, 255, 255, 0.075),
+    rgba(255, 255, 255, 0) 45%
+  );
+  transition: background-position 0.2s;
+}
+
+.glass--strong {
+  background: var(--glass-fill-strong);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.08);
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.08);
+}
+
+.glass--flat::after {
+  display: none;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass--strong {
+    background: #16161a;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ============================================================================
+   Keys — hardware-style buttons with an LED
+   ========================================================================== */
+.key {
+  --key-h: 34px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--key-h);
+  padding: 0 13px;
+  border-radius: 11px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.13), inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 5px rgba(0, 0, 0, 0.45);
+  transition: color 0.15s, background 0.15s, transform 0.12s var(--spring), box-shadow 0.15s;
+  user-select: none;
+}
+
+.key:hover {
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045));
+}
+
+.key:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 3px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.key[aria-pressed='true'],
+.key[aria-selected='true'],
+.key.is-on {
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+}
+
+.key--sm {
+  --key-h: 28px;
+  padding: 0 10px;
+  font-size: 10.5px;
+  border-radius: 9px;
+}
+
+.key--lg {
+  --key-h: 46px;
+  padding: 0 20px;
+  font-size: 12.5px;
+  border-radius: 14px;
+}
+
+.key--accent {
+  color: #1a0a00;
+  background: linear-gradient(180deg, #ff8a3d, #ff6a14 55%, #f25c05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 0 rgba(120, 30, 0, 0.45),
+    0 6px 18px -6px rgba(255, 106, 20, 0.7), 0 0 0 1px rgba(255, 150, 90, 0.4);
+}
+
+.key--accent:hover {
+  color: #000;
+  background: linear-gradient(180deg, #ff9a52, #ff7424 55%, #f76408);
+}
+
+.key--icon {
+  width: var(--key-h);
+  padding: 0;
+}
+
+.key-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.28);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* LED — tiny status light. Lit keys glow orange. */
+.led {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: #2a2a2e;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.7);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.led.is-on,
+.key[aria-pressed='true'] .led,
+.key[aria-selected='true'] .led,
+.key.is-on .led {
+  background: var(--accent);
+  box-shadow: var(--accent-glow);
+}
+
+.led--green.is-on {
+  background: #2bd46f;
+  box-shadow: 0 0 8px rgba(43, 212, 111, 0.8);
+}
+
+/* ============================================================================
+   Knob — rotary control (conversation gap)
+   ========================================================================== */
+.knob {
+  --angle: 0deg;
+  position: relative;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 50%;
+  cursor: grab;
+  touch-action: none;
+  background: radial-gradient(circle at 35% 30%, #3a3a40, #17171a 70%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -3px 6px rgba(0, 0, 0, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.knob:active {
+  cursor: grabbing;
+}
+
+.knob::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 3px;
+  height: 11px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: var(--accent-glow);
+  transform-origin: 50% 17px;
+  transform: rotate(var(--angle));
+  transition: transform 0.25s var(--spring);
+}
+
+.knob-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -135deg, rgba(255, 255, 255, 0.28) 0 1.2deg, transparent 1.2deg 27deg);
+  mask: radial-gradient(circle, transparent 27px, #000 27.5px, #000 31px, transparent 31.5px);
+  -webkit-mask: radial-gradient(circle, transparent 27px, #000 27.5px, #000 31px, transparent 31.5px);
+}
+
+.knob-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+
+.knob-wrap > .knob-ring {
+  position: absolute;
+  inset: 0;
+}
+
+/* ============================================================================
+   Pills & chips
+   ========================================================================== */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 12px 0 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.pill small {
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.3;
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+}
+
+.chip b {
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+.swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 3px;
+  background: var(--sw, var(--ink-3));
+}
+
+.swatch--dot {
+  border-radius: 50%;
+}
+
+.swatch--line {
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================================
+   Liquid navigation capsule with a sliding lens
+   ========================================================================== */
+.nav {
+  position: sticky;
+  top: 12px;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.nav__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 6px;
+  border-radius: 999px;
+  pointer-events: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav__bar::-webkit-scrollbar {
+  display: none;
+}
+
+.nav__bar.glass {
+  /* Darker tint than cards: the nav floats over busy charts and must stay legible. */
+  background: linear-gradient(180deg, rgba(38, 38, 44, 0.74), rgba(16, 16, 20, 0.7));
+}
+
+.nav__item {
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.nav__item:hover {
+  color: var(--ink);
+}
+
+.nav__item.is-active {
+  color: var(--ink);
+}
+
+.nav__item .nav__num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  transition: color 0.2s;
+}
+
+.nav__item.is-active .nav__num {
+  color: var(--accent);
+}
+
+.nav__lens {
+  position: absolute;
+  z-index: 0;
+  top: 6px;
+  left: 0;
+  height: 38px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 12px rgba(255, 255, 255, 0.05), 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.55s var(--spring), width 0.55s var(--spring);
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .nav__item .nav__text {
+    display: none;
+  }
+  .nav__item {
+    padding: 0 12px;
+  }
+}
+
+/* ============================================================================
+   Tooltip
+   ========================================================================== */
+.tooltip {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  min-width: 140px;
+  max-width: 280px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  pointer-events: none;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: rgba(20, 20, 24, 0.82);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.09),
+    0 14px 34px -10px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translate3d(var(--tx, 0), var(--ty, 0), 0) scale(0.98);
+  transition: opacity 0.12s;
+}
+
+.tooltip.is-visible {
+  opacity: 1;
+  transform: translate3d(var(--tx, 0), var(--ty, 0), 0) scale(1);
+}
+
+.tooltip__title {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+
+.tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.tooltip__row + .tooltip__row {
+  margin-top: 3px;
+}
+
+.tooltip__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink-2);
+  min-width: 0;
+}
+
+.tooltip__key span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tooltip__value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.tooltip__note {
+  margin-top: 6px;
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+/* knob readout */
+.knob-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.knob-readout {
+  display: grid;
+  gap: 2px;
+}
+
+.knob-value {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}

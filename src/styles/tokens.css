@@ -1,0 +1,109 @@
+/*
+ * WhatsMetric design tokens — dark only.
+ * Apple "Liquid Glass" surfaces × Teenage Engineering instrument styling.
+ * Chart colours were validated (lightness band, chroma, CVD separation, contrast)
+ * against --chart-surface.
+ */
+:root {
+  color-scheme: dark;
+
+  /* planes */
+  --bg: #050506;
+  --bg-raised: #0c0c0e;
+  --chart-surface: #141416;
+
+  /* glass */
+  --glass-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.072), rgba(255, 255, 255, 0.028));
+  --glass-fill-strong: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045));
+  --glass-blur: blur(22px) saturate(160%);
+  --glass-rim: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.07) 26%,
+    rgba(255, 255, 255, 0.02) 62%,
+    rgba(255, 255, 255, 0.16)
+  );
+  --glass-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 0 rgba(255, 255, 255, 0.025),
+    0 1px 1px rgba(0, 0, 0, 0.35), 0 24px 48px -28px rgba(0, 0, 0, 0.85);
+
+  /* lines */
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.14);
+  --grid: #25252a;
+  --axis: #3a3a40;
+
+  /* ink */
+  --ink: #f3f3f4;
+  --ink-2: #b4b4bb;
+  --ink-3: #85858e;
+  --ink-4: #5d5d66;
+
+  /* accent — Teenage Engineering orange */
+  --accent: #ff6a14;
+  --accent-soft: rgba(255, 106, 20, 0.16);
+  --accent-glow: 0 0 10px rgba(255, 106, 20, 0.75), 0 0 2px rgba(255, 140, 70, 1);
+
+  /* categorical — people (validated order, see src/lib/analysis/people.ts) */
+  --c1: #ed6300;
+  --c2: #3d7efc;
+  --c3: #df4e92;
+  --c4: #bf8b00;
+  --c5: #04a3be;
+  --c6: #d73337;
+  --c7: #8b61e3;
+  --c8: #06ae64;
+  --c-other: #6e6e78;
+
+  /* sequential "heat" (semantic, always shown with a scale legend) */
+  --heat-0: #1b1b1f;
+  --heat-1: #451406;
+  --heat-2: #702101;
+  --heat-3: #993700;
+  --heat-4: #c14f02;
+  --heat-5: #e47001;
+  --heat-6: #fb9a09;
+  --heat-7: #ffcc5f;
+
+  /* diverging: negative ← neutral → positive */
+  --neg-strong: #f97770;
+  --neg: #db4241;
+  --neutral: #4a4a50;
+  --pos: #2389e2;
+  --pos-strong: #73b6fa;
+
+  /* status (reserved meaning; always paired with icon + label) */
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+
+  /* type */
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Noto Color Emoji';
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
+  --font-dot: 'Doto', var(--font-mono);
+  --font-emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+
+  /* shape & space */
+  --r-xl: 30px;
+  --r-lg: 24px;
+  --r-md: 18px;
+  --r-sm: 12px;
+  --r-xs: 8px;
+  --gutter: 24px;
+  --gap: 16px;
+  --content: 1280px;
+
+  /* motion */
+  --spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --gutter: 16px;
+    --gap: 12px;
+    --r-lg: 20px;
+  }
+}

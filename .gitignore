@@ -1,0 +1,23 @@
+# dependencies
+node_modules
+
+# builds
+dist
+dist-single
+*.tsbuildinfo
+
+# logs & editor
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# local test data — never commit real chats
+*.txt
+!public/**/*.txt
+test-results
+playwright-report
+
+# local-only dev scripts (may reference private chats)
+dev/
