@@ -17,7 +17,7 @@ import {
 import { CornerMarks, KeyGroup } from './ui/primitives';
 
 const FEATURES = [
-  { icon: Award, title: '35 awards', body: 'The Yapper, Night Owl, Most Toxic, Kindest Soul, The Ghost, Class Clown and more.' },
+  { icon: Award, title: '37 awards', body: 'The Yapper, Night Owl, Most Toxic, Kindest Soul, The Ghost, Class Clown and more.' },
   { icon: CalendarClock, title: 'Heatmaps', body: 'Every day of the chat, every hour of the week, and everyone’s personal body clock.' },
   { icon: Timer, title: 'Reply speed', body: 'Who answers in seconds, who leaves you on read, who double-texts.' },
   { icon: Activity, title: 'Mood & spice', body: 'Positivity, toxicity, kindness and emotions — in English and Hinglish.' },

@@ -1,6 +1,6 @@
 # WhatsMetric
 
-**Your group chat, measured.** Drop in a WhatsApp chat export and get 150+ stats, 35 awards and 50+ charts: who yaps the most, who ghosts, who's the most toxic, who's secretly the kindest, when the chat comes alive, and everyone's verbal fingerprint.
+**Your group chat, measured.** Drop in a WhatsApp chat export and get 150+ stats, 37 awards and 50+ charts: who yaps the most, who ghosts, who's the most toxic, who's secretly the kindest, when the chat comes alive, and everyone's verbal fingerprint.
 
 Everything runs **in your browser**. The chat is parsed and analysed on your device (in a Web Worker) and is never uploaded anywhere.
 
@@ -28,7 +28,7 @@ The dashboard is one long report split into ten numbered modules. Every chart ca
 | Module | What you get |
 | --- | --- |
 | **01 Overview** | Total messages, words, media, emoji, links, active days, longest streak, longest silence, conversations, a daily/weekly timeline with the busiest day, and fun equivalents (novels of text, hours of typing/reading, time spent in conversation). |
-| **02 Awards** | 35 superlatives with runners-up, including The Yapper, Novelist, Dry Texter, Paparazzi, Link Dealer, Essayist, Walking Thesaurus, Emoji Addict, CAPS LOCK Champ, Curious Cat, Hype Machine, Evidence Destroyer (deleted messages), Perfectionist (edits), Double Texter, Machine Gunner, Night Owl, Early Bird, Streak Master, The Ghost, Weekend Warrior, Speed Demon, Slowpoke, Ice Breaker, Left on Read, Class Clown, Easy Audience, Tagger, Main Character, Pollster, **Most Toxic**, **Kindest Soul**, Ray of Sunshine, Storm Cloud, Hopeless Romantic, Most Grateful, Sorry Not Sorry, and Drama Royalty. |
+| **02 Awards** | 37 superlatives with runners-up, including The Yapper, Novelist, Dry Texter, Paparazzi, Link Dealer, Essayist, Walking Thesaurus, Emoji Addict, CAPS LOCK Champ, Curious Cat, Hype Machine, Evidence Destroyer (deleted messages), Perfectionist (edits), Double Texter, Machine Gunner, Night Owl, Early Bird, Streak Master, The Ghost, Weekend Warrior, Speed Demon, Slowpoke, Ice Breaker, Left on Read, Class Clown, Easy Audience, Tagger, Main Character, Pollster, **Most Toxic**, **Kindest Soul**, Ray of Sunshine, Storm Cloud, Hopeless Romantic, Most Grateful, Sorry Not Sorry, and Drama Royalty. |
 | **03 People** | Share-of-voice waffle chart, "who owns what" (messages, words, media, emoji, links, questions, laughs, tags, swears, kind words, deletions), monthly volume as stacked area / streamgraph / 100% share / rank race, message length, active days, and a 17-column sortable leaderboard. |
 | **04 Time** | Calendar heatmap of every day, weekday × hour punch card, 24-hour radial clock, each person's "chronotype" ridgeline, busiest weekday, seasons (month of year / year by year), and time records (busiest day, busiest hour ever, busiest and quietest month, peak hour, night and morning share). |
 | **05 Dynamics** | Conversation stats, who starts conversations, who gets left on read, reply speed per person, reply-time distribution, a chord diagram and friendship network of who replies to whom, a reply matrix, top duos, @mention matrix, message bursts, double texts, conversation sizes, kick-off times, reply speed by hour, and the longest conversation. |
