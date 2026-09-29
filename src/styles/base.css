@@ -1,0 +1,231 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+::selection {
+  background: rgba(255, 106, 20, 0.35);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- ambient backdrop: gives the glass something to refract ---------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+
+.ambient__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.85;
+  will-change: transform;
+  animation: orb-float 38s var(--ease) infinite alternate;
+}
+
+.ambient__orb--a {
+  width: 56vmax;
+  height: 56vmax;
+  left: -18vmax;
+  top: -24vmax;
+  background: radial-gradient(circle at 40% 40%, rgba(237, 99, 0, 0.5), rgba(237, 99, 0, 0) 64%);
+}
+
+.ambient__orb--b {
+  width: 50vmax;
+  height: 50vmax;
+  right: -20vmax;
+  top: 8vmax;
+  background: radial-gradient(circle at 50% 50%, rgba(61, 126, 252, 0.4), rgba(61, 126, 252, 0) 64%);
+  animation-duration: 46s;
+  animation-delay: -12s;
+}
+
+.ambient__orb--c {
+  width: 44vmax;
+  height: 44vmax;
+  left: 22vmax;
+  bottom: -30vmax;
+  background: radial-gradient(circle at 50% 50%, rgba(223, 78, 146, 0.3), rgba(223, 78, 146, 0) 64%);
+  animation-duration: 52s;
+  animation-delay: -24s;
+}
+
+.ambient__grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.085) 1px, transparent 1.3px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 30%, transparent 85%);
+}
+
+.ambient__grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.06;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@keyframes orb-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6vmax, 4vmax, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(-4vmax, 8vmax, 0) scale(0.96);
+  }
+}
+
+/* ---------- type primitives ---------- */
+.mono {
+  font-family: var(--font-mono);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.muted {
+  color: var(--ink-3);
+}
+
+.dim {
+  color: var(--ink-2);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.emoji {
+  font-family: var(--font-emoji);
+  font-style: normal;
+  line-height: 1;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- scrollbars ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- accessibility preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* The app root is its own stacking context so the fixed ambient layer (z-index -1)
+   paints above the body background but beneath all content. */
+#root {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  min-height: 100vh;
+}

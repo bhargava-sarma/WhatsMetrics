@@ -1,0 +1,511 @@
+/* ============================================================================
+   Chart chrome — recessive: hairline solid grid, muted mono ticks.
+   The data is the only loud thing.
+   ========================================================================== */
+.chart {
+  position: relative;
+  width: 100%;
+}
+
+.chart svg {
+  overflow: visible;
+}
+
+.ax-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.ax-text--strong {
+  fill: var(--ink-2);
+}
+
+.ax-line {
+  stroke: var(--axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.grid-line {
+  stroke: var(--grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.chart-label {
+  font-size: 11.5px;
+  fill: var(--ink-2);
+  font-weight: 500;
+}
+
+.chart-value {
+  font-size: 11.5px;
+  font-weight: 600;
+  fill: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.mark {
+  transition: opacity 0.15s, filter 0.15s;
+  outline: none;
+}
+
+.marks:hover .mark {
+  opacity: 0.55;
+}
+
+.marks .mark:hover,
+.marks .mark:focus-visible {
+  opacity: 1;
+  filter: brightness(1.18);
+}
+
+.hit {
+  fill: transparent;
+  cursor: default;
+}
+
+.crosshair {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+/* grow-in animation for bars */
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.anim-fade {
+  animation: fade-in 0.6s var(--ease) both;
+}
+
+/* ============================================================================
+   Legend
+   ========================================================================== */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.scale-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+.scale-legend__ramp {
+  display: flex;
+  gap: 2px;
+}
+
+.scale-legend__ramp span {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* ============================================================================
+   Bar list (HTML) — horizontal bars that grow from a shared baseline
+   ========================================================================== */
+.barlist {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barlist__row {
+  display: grid;
+  grid-template-columns: minmax(78px, var(--label-w, 30%)) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.barlist__row:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.barlist__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.barlist__label > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barlist__track {
+  position: relative;
+  height: var(--bar-h, 14px);
+}
+
+.barlist__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 0 4px 4px 0;
+  background: var(--fill, var(--c1));
+  transform-origin: left center;
+  animation: grow-x 0.9s var(--ease) both;
+  transition: filter 0.15s;
+}
+
+.barlist__row:hover .barlist__fill {
+  filter: brightness(1.2);
+}
+
+.barlist__ghost {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 4px 4px 0;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.barlist__value {
+  min-width: 46px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.barlist__value small {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* ============================================================================
+   Waffle / share bars / matrix
+   ========================================================================== */
+.waffle {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 250px;
+  aspect-ratio: 1;
+}
+
+.waffle span {
+  border-radius: 4px;
+  background: var(--sq);
+  transition: transform 0.2s var(--spring), filter 0.2s;
+  animation: fade-in 0.5s var(--ease) both;
+}
+
+.waffle span:hover {
+  transform: scale(1.15);
+  filter: brightness(1.2);
+}
+
+.sharebars {
+  display: grid;
+  gap: 12px;
+}
+
+.sharebars__row {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.sharebars__label {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.sharebars__bar {
+  display: flex;
+  gap: 2px;
+  height: 16px;
+}
+
+.sharebars__seg {
+  height: 100%;
+  background: var(--fill);
+  min-width: 0;
+  transition: filter 0.15s;
+  outline: none;
+}
+
+.sharebars__seg:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.sharebars__seg:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.sharebars__seg:only-child {
+  border-radius: 4px;
+}
+
+.sharebars__seg:hover,
+.sharebars__seg:focus-visible {
+  filter: brightness(1.25);
+}
+
+.matrix {
+  display: grid;
+  gap: 3px;
+  font-size: 12px;
+}
+
+.matrix__cell {
+  display: grid;
+  place-items: center;
+  min-height: 34px;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+  font-weight: 600;
+  outline: none;
+}
+
+.matrix__cell:hover,
+.matrix__cell:focus-visible {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.matrix__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.matrix__head--col {
+  justify-content: center;
+  writing-mode: horizontal-tb;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================================
+   Emoji keypad
+   ========================================================================== */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+  gap: 8px;
+}
+
+.keypad__key {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -3px 0 rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.05), 0 3px 8px rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s var(--spring);
+  outline: none;
+}
+
+.keypad__key:hover,
+.keypad__key:focus-visible {
+  transform: translateY(-2px);
+}
+
+.keypad__key .emoji {
+  font-size: 30px;
+}
+
+.keypad__key--hero .emoji {
+  font-size: 44px;
+}
+
+.keypad__count {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+
+.keypad__rank {
+  position: absolute;
+  top: 7px;
+  left: 9px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+}
+
+/* ============================================================================
+   Word cloud
+   ========================================================================== */
+.cloud text {
+  font-family: var(--font-sans);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  cursor: default;
+  transition: opacity 0.2s;
+  outline: none;
+}
+
+.cloud:hover text {
+  opacity: 0.45;
+}
+
+.cloud text:hover,
+.cloud text:focus-visible {
+  opacity: 1;
+}
+
+/* ============================================================================
+   Mood bars (diverging, centred on neutral)
+   ========================================================================== */
+.moodbars {
+  display: grid;
+  gap: 10px;
+}
+
+.moodbars__axis {
+  display: grid;
+  grid-template-columns: 110px 1fr 1fr 1fr 42px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.moodbars__axis span:nth-child(1) {
+  grid-column: 2;
+}
+
+.moodbars__axis span:nth-child(2) {
+  text-align: center;
+}
+
+.moodbars__axis span:nth-child(3) {
+  text-align: right;
+}
+
+.moodbars__row {
+  display: grid;
+  grid-template-columns: 110px 1fr 42px;
+  align-items: center;
+  gap: 0 12px;
+}
+
+.moodbars__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.moodbars__track {
+  position: relative;
+  height: 16px;
+}
+
+.moodbars__center {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--axis);
+}
+
+.moodbars__seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transition: filter 0.15s;
+}
+
+.moodbars__seg:hover {
+  filter: brightness(1.25);
+}
+
+.moodbars__seg--neg {
+  background: var(--neg);
+  border-radius: 4px 0 0 4px;
+  margin-right: 2px;
+}
+
+.moodbars__seg--neu {
+  background: var(--neutral);
+}
+
+.moodbars__seg--pos {
+  background: var(--pos);
+  border-radius: 0 4px 4px 0;
+  margin-left: 2px;
+}
+
+.moodbars__net {
+  text-align: right;
+  font-weight: 600;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.matrix__topic {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+}
